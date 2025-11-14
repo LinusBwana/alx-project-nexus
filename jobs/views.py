@@ -1,22 +1,22 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import CategorySerializer, LocationSerializer, CompanySerializer, JobSerializer
-from .models import Category, Location, Company, Job
+from .serializers import IndustrySerializer, LocationSerializer, CompanySerializer, JobSerializer
+from .models import Industry, Location, Company, Job
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
-class CategoryViewset(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    # For general keyword sear
+class IndustryViewset(viewsets.ModelViewSet):
+    queryset = Industry.objects.all()
+    serializer_class = IndustrySerializer
+    # For general keyword search
     search_fields = ['name', 'slug', 'description']
 
 
 class LocationViewset(viewsets.ModelViewSet):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
-    # For general keyword sear
+    # For general keyword search
     search_fields = ['country', 'city', 'region', 'is_remote']
 
 

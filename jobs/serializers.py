@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import Category, Location, Company, Job
+from .models import Industry, Location, Company, Job
 
-class CategorySerializer(serializers.ModelSerializer):
+class IndustrySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category
+        model = Industry
         fields = ['id', 'name', 'slug', 'description', 'is_active', 'created_at', 'updated_at']
         read_only_fields = ['id', 'slug', 'is_active', 'created_at', 'updated_at']
 
@@ -17,7 +17,7 @@ class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = '__all__'
-        read_only_fields = ['id', 'slug', 'industry', 'is_verified', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'slug', 'is_verified', 'created_at', 'updated_at']
 
 class JobSerializer(serializers.ModelSerializer):
     class Meta:

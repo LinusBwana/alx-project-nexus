@@ -6,7 +6,7 @@ from django.utils import timezone
 import random, string
 
 # Create your models here.
-class Category(models.Model):
+class Industry(models.Model):
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -25,7 +25,7 @@ class Category(models.Model):
             base_slug = slugify(self.name)
             slug = base_slug
             # Handle duplicate slugs
-            while Category.objects.filter(slug=slug).exists():
+            while Industry.objects.filter(slug=slug).exists():
                 random_str = ''.join(random.choices(string.ascii_lowercase + string.digits, k=4))
                 slug = f"{base_slug}-{random_str}"
             self.slug = slug
@@ -77,14 +77,14 @@ class Company(models.Model):
     name = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(unique=True, blank=True)
     locations = models.ManyToManyField(Location, related_name='companies')
-    description = models.TextField(max_length=500, blank=True, null=True)
+    description = models.TextField(max_length=500, blank=False, null=False)
     logo = models.ImageField(
         upload_to='company_logos/',
         blank=True, 
         null=True
         )
     website_url = models.URLField(blank=True, null=True)
-    industry = models.CharField(max_length=100)
+    industry = models.ForeignKey(Industry, on_delete=models.PROTECT, related_name='companies')
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -102,7 +102,8 @@ class Company(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            base_slug = slugify(self.description)
+            # Use name + first 30 chars of description
+            base_slug = f"{self.name} {self.description[:30]}"
             slug = base_slug
             # Handle duplicate slugs
             while Company.objects.filter(slug=slug).exists():
@@ -138,7 +139,7 @@ class Job(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='jobs')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='jobs')
+    category = models.ForeignKey(Industry, on_delete=models.CASCADE, related_name='jobs')
     location = models.ManyToManyField(Location, related_name='jobs')
     job_type = models.CharField(
         choices=job_type_choices,
@@ -151,8 +152,8 @@ class Job(models.Model):
         default='entry', 
     )
     description = models.TextField()
-    requirements = models.TextField()
-    responsibilities = models.TextField()
+    requirements = models.TextField(help_text="Comma-separated skills")
+    responsibilities = models.TextField(help_text="Comma-separated skills")
     skills_required = models.TextField(help_text="Comma-separated skills")
     salary_min = models.DecimalField(max_digits=10, decimal_places=2,
                                      blank=True, null=True)
