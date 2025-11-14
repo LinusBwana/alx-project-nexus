@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 
     # Third-party apps
     'rest_framework',
+    'django_filters',
 ]
 
 
@@ -142,8 +143,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 AUTH_USER_MODEL = env('AUTH_USER_MODEL', default='accounts.User')
 
 
-REST_FRAMEWORk = {
-    'DEFAULT_AUTHENTIFICATION_CLASSES': (
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
 }
