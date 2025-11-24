@@ -4,6 +4,7 @@ from .serializers import ApplyJobSerializer, ApplicantHistorySerializer, Employe
 from .models import ApplyJob
 from .permissions import IsAuthenticatedToApply, IsApplicantOwner, IsJobOwner
 from rest_framework.permissions import IsAuthenticated
+from .throttles import CustomUserThrottle
 
 # Create your views here.
 class ApplyJobViewset(viewsets.ModelViewSet):
@@ -12,6 +13,7 @@ class ApplyJobViewset(viewsets.ModelViewSet):
     serializer_class = ApplyJobSerializer
     permission_classes = [IsAuthenticatedToApply]
     http_method_names = ['post']
+    throttle_classes = [CustomUserThrottle]
 
     def perform_create(self, serializer):
         # Automatically set the applicant to the logged-in user

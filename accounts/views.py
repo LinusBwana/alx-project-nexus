@@ -1,21 +1,25 @@
 from rest_framework import viewsets, status, mixins
 from .models import User
 from .serializers import UserSerializer, RegisterUserSerializer, LoginSerializer
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework import status
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
+from .throttles import CustomAnonThrottle
 
 
 class RegisterViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = RegisterUserSerializer
     permission_classes = [AllowAny]
+    throttle_classes = [CustomAnonThrottle]
 
 
 class LoginViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
+    throttle_classes = [CustomAnonThrottle]
     @swagger_auto_schema(request_body=LoginSerializer)
+    
 
     def create(self, request, *args, **kwargs):
         """

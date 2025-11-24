@@ -5,7 +5,7 @@ from .models import Industry, Location, Company, Job
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .permissions import IsAdminUser, IsEmployer, IsLocationOwner, IsCompanyOwner, IsJobOwner
-from rest_framework.exceptions import PermissionDenied
+from .throttles import CustomUserThrottle
 
 # Create your views here.
 class IndustryViewset(viewsets.ModelViewSet):
@@ -61,6 +61,7 @@ class PostJobViewset(viewsets.ModelViewSet):
     queryset = Job.objects.all()
     serializer_class = PostJobSerializer
     permission_classes = [IsEmployer, IsJobOwner]
+    throttle_classes = [CustomUserThrottle]
     # For general keyword sear
     search_fields = ['title', 'slug', 'industry__name', 'locations__country', 
                      'locations__region', 'description', 'experience_level', 
