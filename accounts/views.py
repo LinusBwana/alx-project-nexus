@@ -5,19 +5,19 @@ from rest_framework.permissions import AllowAny
 from rest_framework import status
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
-from .throttles import CustomAnonThrottle
+from .throttles import LoginAnonThrottle, RegisterAnonThrottle
 
 
 class RegisterViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = RegisterUserSerializer
     permission_classes = [AllowAny]
-    throttle_classes = [CustomAnonThrottle]
+    throttle_classes = [RegisterAnonThrottle]
 
 
 class LoginViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
-    throttle_classes = [CustomAnonThrottle]
+    throttle_classes = [LoginAnonThrottle]
     @swagger_auto_schema(request_body=LoginSerializer)
     
 

@@ -28,10 +28,5 @@ RUN python manage.py collectstatic --noinput --clear || true
 # Expose port
 EXPOSE 8000
 
-# Run Django server
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
-# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
-# Run migrations and start server
-# CMD python manage.py migrate && \
-#     python manage.py runserver 0.0.0.0:8000 -p 8000
+# Use gunicorn instead of runserver
+CMD gunicorn job_board_backend.wsgi:application --bind 0.0.0.0:$PORT

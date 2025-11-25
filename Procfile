@@ -1,1 +1,1 @@
-web: gunicorn job_board_backend.wsgi
+web: gunicorn job_board_backend.wsgi:application --bind 0.0.0.0:$PORT
