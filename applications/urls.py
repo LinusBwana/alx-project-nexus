@@ -8,5 +8,5 @@ router.register(r'my-applications-history', MyApplicationHistoryViewset, basenam
 router.register(r'job-applications-history', JobApplicationsHistoryViewset, basename='job-applications')
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
 ]

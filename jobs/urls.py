@@ -10,5 +10,5 @@ router.register(r'postjobs', PostJobViewset, basename='postjobs')
 router.register(r'availablejobs', AvailableJobsViewset, basename='availablejobs')
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
 ]
