@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 from datetime import timedelta
 import dj_database_url
-from decouple import config
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,8 +32,13 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
 
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
 
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default='https://*.railway.app',
+    cast=lambda v: [s.strip() for s in v.split(',')]
+)
 
 # Application definition
 
@@ -154,8 +159,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTH_USER_MODEL = config('AUTH_USER_MODEL', default='accounts.User')
 
