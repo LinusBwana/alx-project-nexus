@@ -203,5 +203,6 @@ SWAGGER_SETTINGS = {
             'in': 'header',
             'description': 'JWT Authorization header'
         }
-    }
+    },
+    'DEFAULT_API_URL': 'https://alx-project-nexus-production-930e.up.railway.app',
 }
